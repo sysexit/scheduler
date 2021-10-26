@@ -1,0 +1,427 @@
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/_icons.scss";
+
+$breakpoint: 750px;
+$vertical-min: 330px;
+$vertical-max: 450px;
+$horizontal-min: 630px;
+$horizontal-max: 750px;
+$heading-color: #eee;
+
+* {
+  box-sizing: border-box;
+}
+
+.col {
+  flex-basis: 0;
+  flex-grow: 1;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.title-bar {
+  font-size: 30px;
+  color: #333;
+  line-height: 32px;
+  font-weight: 300;
+}
+
+.user-avatar {
+  width: 25px;
+  height: 25px;
+}
+
+/**
+ * Timesheets CSS
+**/
+
+.timesheet-user {
+  height: 44px;
+}
+
+.sidebar-container {
+  background: #fff;
+  // height: calc(100vh);
+  min-width: 270px;
+  max-width: 270px;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-bottom: -3px;
+  padding: 20px;
+  color: #333;
+  border-right: 1px solid #ddd;
+
+  .schedule-sidebar {
+    padding: 40px 0px 0px 15px;
+
+    .items-container {
+      padding-left: 0;
+    }
+  }
+}
+
+.modal-body {
+  .shift-block-item {
+    height: 40px;
+    display: flex;
+    color: rgb(248, 248, 248);
+    line-height: 40px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    background-color: rgb(66, 17, 166);
+
+    .info {
+      flex-grow: 1;
+      padding: 0px 6px;
+      cursor: pointer;
+    }
+
+    .modify {
+      width: 32px;
+      opacity: 0.75;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.25);
+    }
+  }
+}
+
+.navbar {
+  ul {
+    list-style-type: none;
+  }
+
+  li {
+    display: inline-block;
+  }
+
+  button {
+    z-index: 1000;
+  }
+}
+
+nav {
+  min-height: 56px;
+  text-align: center;
+
+  .menu,
+  a,
+  p {
+    color: #999;
+    padding: 0 20px;
+  }
+
+  .active,
+  a .active {
+    color: white;
+  }
+
+  li {
+    text-transform: uppercase;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+
+  ul {
+    padding-left: 0;
+  }
+
+  a:hover {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+.table {
+  display: block;
+  flex-wrap: wrap;
+  margin: 0 0 3em 0;
+  padding: 0;
+
+  .hour-type-total {
+    margin-right: 15px;
+  }
+
+  .table-head,
+  .table-foot {
+    > div {
+      padding: 1em;
+    }
+
+    background-color: $heading-color;
+    color: black;
+  }
+
+  .table-row {
+    width: 100%;
+    display: flex;
+    min-height: 43px;
+
+    .show-plus .shift-holder:hover:before {
+      @extend %fa-icon;
+      @extend .fas;
+
+      right: 0;
+      content: fa-content($fa-var-plus);
+      color: #51a33d;
+      align-self: center;
+      padding-right: 10px;
+      padding-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .table-cell:last-of-type {
+      border-right: 1px solid #ddd;
+    }
+
+    .table-cell--heading {
+      display: none;
+    }
+
+    .table-cell--content {
+      a {
+        font-size: 2em;
+        color: #333;
+      }
+
+      .webinar-date {
+        font-weight: 700;
+      }
+    }
+
+    .table-cell {
+      flex-grow: 1;
+      overflow: hidden; // Or flex might break
+      list-style: none;
+      border-left: 1px solid #ddd;
+      border-top: 1px solid #ddd;
+
+      /**
+       * Shift scheduler CSS
+       **/
+
+      .shift-holder {
+        min-height: 100%;
+
+        .can-schedule:hover .actions {
+          display: block;
+        }
+
+        .shift-item:hover .add-shift-wrapper {
+          display: block;
+        }
+
+        .shift-item {
+          position: relative;
+          margin-top: 4px;
+          padding: 0 4px;
+          height: 38px;
+          display: flex;
+          flex-wrap: nowrap;
+
+          .add-shift {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            i {
+              color: #51a33d;
+            }
+          }
+
+          .actions {
+            display: none;
+            text-align: center;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+          }
+
+          .tag {
+            text-transform: uppercase;
+            border-radius: 2px;
+            margin-left: 4px;
+            line-height: 16px;
+          }
+
+          .add-shift-wrapper {
+            height: 100%;
+            width: 20px;
+            padding: 0;
+            flex: none;
+            display: none;
+          }
+
+          .details-container {
+            width: 100%;
+            flex: 1;
+            min-width: 0;
+            position: relative;
+          }
+
+          .details {
+            width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            color: #333;
+            font-weight: 600;
+            height: 100%;
+            border: 4px solid transparent;
+            display: flex;
+            align-items: center;
+            line-height: 16px;
+            transform: translateZ(0);
+          }
+
+          .actions button,
+          .actions div.btn {
+            background-color: rgba(0, 0, 0, 0.25);
+            border-color: transparent !important;
+            box-shadow: none !important;
+            height: 30px;
+            padding: 6px 0;
+          }
+        }
+      }
+
+      .not-published {
+        background-image: url("/build/img/shift-item-notpublished.png");
+      }
+    }
+
+    .highlight-cell {
+      background-color: #ffe;
+    }
+
+    .scheduled-shift-cell {
+      background-color: $heading-color;
+    }
+
+    .date-cell {
+      width: 20%;
+    }
+
+    .user-info-col {
+      width: 20%;
+      min-width: 7%;
+      overflow: hidden;
+    }
+
+    .hour-cell {
+      width: 20%;
+      overflow: visible !important;
+    }
+  }
+
+  .timesheet {
+    input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      padding: 10px;
+    }
+
+    .subrow {
+      width: 100%;
+      height: 100%;
+      display: inline-flex;
+
+      .subrow-item {
+        width: 33.33%;
+        border-left: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+      }
+    }
+
+    .subrow-container {
+      width: 60%;
+      height: 100%;
+    }
+  }
+}
+
+// Non-Flex modernizer fallback
+.no-flexbox .table {
+  display: block;
+
+  &.table-cell {
+    width: 100%;
+  }
+}
+
+.box-container {
+  margin-top: 25px;
+  background-color: white;
+  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 10%), 0 2px 2px 0 rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.table {
+  .table-head,
+  .table-foot {
+    > div {
+      background-color: $heading-color;
+      color: black;
+    }
+  }
+
+  overflow: auto;
+}
+
+/**
+ * Responsive CSS
+**/
+
+@media all and (min-width: $breakpoint) {
+  .admin-container {
+    width: 75% !important;
+  }
+  .auth-container {
+    width: 25% !important;
+  }
+}
+
+@media all and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation: landscape) {
+  .hour-cell {
+    flex-shrink: 0;
+    max-width: 55px;
+  }
+  .admin-container {
+    width: 700px !important;
+  }
+}
+
+@media all and (min-device-width: $vertical-min) and (max-device-width: $vertical-max) and (orientation: portrait) {
+  .date-cell {
+    min-width: 40%;
+  }
+  .subrow-container {
+    min-width: 120%;
+  }
+  .hour-cell {
+    min-width: 15%;
+  }
+}
+
+@media all and (min-device-width: $horizontal-min) and (max-device-width: $horizontal-max) and (orientation: landscape) {
+  .schedule-table .table-cell {
+    min-width: 15% !important;
+  }
+  .date-cell {
+    min-width: 20%;
+  }
+  .subrow-container {
+    min-width: 60%;
+  }
+  .hour-cell {
+    min-width: 15%;
+  }
+}

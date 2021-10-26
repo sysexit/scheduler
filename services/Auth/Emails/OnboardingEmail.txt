@@ -1,0 +1,7 @@
+An account on the BRAND staff website has been created on your behalf.
+
+To set your details and password, please go to {0}.
+
+Once you have set your password, you will be able to immediately login using your email address and your newly set password.
+
+Regards, BRAND management.

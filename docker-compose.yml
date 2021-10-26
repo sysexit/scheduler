@@ -1,0 +1,153 @@
+version: "3.9"
+services:
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "443:443"
+      - "80:80"
+    depends_on:
+      - onboarding.api
+      - auth.api
+      - timesheets.api
+      - schedule.api
+      - users.api
+      - templates.api
+      - positions.api
+      - frontend
+
+  db:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+
+  onboarding.api:
+    build:
+      context: ./services/Onboarding/Onboarding.API
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@database/${DB_NAME}
+      - DOMAIN=${DOMAIN}
+      - EMAIL_SERVER=${EMAIL_SERVER}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_SSL=${EMAIL_SSL}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - EMAIL_ACCOUNT=${EMAIL_ACCOUNT}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_HR_TO=${EMAIL_HR_TO}
+    depends_on:
+      - db
+    links:
+      - "db:database"
+
+  auth.api:
+    build:
+      context: ./services/Auth
+      dockerfile: Dockerfile
+    restart: always
+
+    environment:
+      - COMPANY=${COMPANY}
+      - DOMAIN=${DOMAIN}
+      - EMAIL_SERVER=${EMAIL_SERVER}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_SSL=${EMAIL_SSL}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - EMAIL_ACCOUNT=${EMAIL_ACCOUNT}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - DB_URL=Server=database;UserId=${DB_USER};Password=${DB_PASSWORD};Database=${DB_NAME};
+      - SECRET=${SECRET}
+    depends_on:
+      - db
+    links:
+      - "db:database"
+
+  timesheets.api:
+    build:
+      context: ./services/Timesheets
+      dockerfile: Dockerfile
+    restart: always
+
+    environment:
+      - DB_URL=Server=database;UserId=${DB_USER};Password=${DB_PASSWORD};Database=${DB_NAME};
+      - SECRET=${SECRET}
+      - DOMAIN=${DOMAIN}
+    depends_on:
+      - db
+    links:
+      - "db:database"
+
+  schedule.api:
+    build:
+      context: ./services/Scheduler
+      dockerfile: Dockerfile
+    restart: always
+
+    environment:
+      - DB_URL=Server=database;UserId=${DB_USER};Password=${DB_PASSWORD};Database=${DB_NAME};
+      - SECRET=${SECRET}
+      - DOMAIN=${DOMAIN}
+    depends_on:
+      - db
+    links:
+      - "db:database"
+
+  users.api:
+    build:
+      context: ./services/Users
+      dockerfile: Dockerfile
+    restart: always
+
+    environment:
+      - DB_URL=Server=database;UserId=${DB_USER};Password=${DB_PASSWORD};Database=${DB_NAME};
+      - SECRET=${SECRET}
+      - DOMAIN=${DOMAIN}
+    depends_on:
+      - db
+    links:
+      - "db:database"
+
+  templates.api:
+    build:
+      context: ./services/Templates
+      dockerfile: Dockerfile
+    restart: always
+
+    environment:
+      - DB_URL=Server=database;UserId=${DB_USER};Password=${DB_PASSWORD};Database=${DB_NAME};
+      - SECRET=${SECRET}
+      - DOMAIN=${DOMAIN}
+    depends_on:
+      - db
+    links:
+      - "db:database"
+
+  positions.api:
+    build:
+      context: ./services/Positions
+      dockerfile: Dockerfile
+    restart: always
+
+    environment:
+      - DB_URL=Server=database;UserId=${DB_USER};Password=${DB_PASSWORD};Database=${DB_NAME};
+      - SECRET=${SECRET}
+      - DOMAIN=${DOMAIN}
+    depends_on:
+      - db
+    links:
+      - "db:database"

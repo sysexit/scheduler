@@ -1,0 +1,91 @@
+upstream hrbackend {
+  server onboarding.api:4466;
+}
+
+upstream frontend {
+  server frontend:4456;
+}
+
+upstream auth.api {
+  server auth.api:80;
+}
+
+upstream users.api {
+  server users.api:80;
+}
+
+upstream schedule.api {
+  server schedule.api:80;
+}
+
+upstream templates.api {
+  server templates.api:80;
+}
+
+upstream positions.api {
+  server positions.api:80;
+}
+
+upstream timesheets.api {
+  server timesheets.api:80;
+}
+
+server {
+  listen 80;
+  listen [::]:80;
+  #listen 443 ssl http2;
+  #listen [::]:443 ssl http2;
+
+  server_name         staff.domain.com;
+  #ssl_certificate     /certs/staff.domain.com/fullchain.pem;
+  #ssl_certificate_key /certs/staff.domain.com/privkey.pem;
+
+  include "/etc/nginx/conf/staff.conf";
+}
+
+server {
+  listen 80;
+  listen [::]:80;
+  #listen 443 ssl http2;
+  #listen [::]:443 ssl http2;
+
+  #ssl_certificate /certs/domain.com/fullchain.pem;
+  #ssl_certificate_key /certs/domain.com/privkey.pem;
+  server_name domain.com;
+
+  include "/etc/nginx/conf/default.conf";
+}
+
+server {
+  listen 80;
+  listen [::]:80;
+  #listen 443 ssl http2;
+  #listen [::]:443 ssl http2;
+
+  server_name         api.domain.com;
+  #ssl_certificate     /certs/api.domain.com/fullchain.pem;
+  #ssl_certificate_key /certs/api.domain.com/privkey.pem;
+
+  include "/etc/nginx/conf/api.conf";
+}
+
+server {
+  listen 80;
+  listen [::]:80;
+  #listen 443 ssl http2;
+  #listen [::]:443 ssl http2;
+
+  server_name         hr.domain.com;
+  #ssl_certificate     /certs/hr.domain.com/fullchain.pem;
+  #ssl_certificate_key /certs/hr.domain.com/privkey.pem;
+
+  include "/etc/nginx/conf/hr.conf";
+}
+
+#server {
+#  listen 80 default_server;
+#
+#  server_name _;
+#
+#  return 301 https://$host$request_uri;
+#}

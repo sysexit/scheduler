@@ -1,0 +1,6 @@
+/node_modules
+/logs
+/build
+/public/build
+/src/scheduler-app/assets/bootstrap
+/src/scheduler-app/assets/fontawesome-free
